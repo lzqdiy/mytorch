@@ -112,3 +112,22 @@ opitimizer.zero_grad()
 
 # エポック数
 max_epoch = 1
+torch.manual_seed(0)
+# モデルのインスタンス化とデバイスへの転送
+net = Net().to(device)
+
+# 最適化手法
+opitimizer = torch.optim.SGD(net.parameters(), lr=0.1)
+
+# 学習のループ
+for epoch in range(max_epoch):
+    for batch in train_loader:
+        x, t = batch
+        x = x.to(device)
+        t = t.to(device)
+        y = net(x)
+        loss = F.cross_entropy(y, t)
+        print(f"loss:{loss}")
+        opitimizer.zero_grad()
+        loss.backward()
+        opitimizer.step()
